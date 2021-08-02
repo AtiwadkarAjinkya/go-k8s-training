@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: velotio-ajinkya
+  name: busybox-deployment
+  labels:
+    app: busybox
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: velotio-busybox
+  template:
+    metadata:
+      labels:
+        app: velotio-busybox
+    spec:
+      containers:
+      - name: busybox
+        image: busybox
+        command: [ "/bin/sh", "-c", "echo $ENV1 && sleep 3600" ]
+        env:
+          - name: ENV1
+            valueFrom:
+              configMapKeyRef:
+                name: velotio-cm
+                key: env1

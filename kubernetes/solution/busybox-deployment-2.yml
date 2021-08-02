@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: velotio-ajinkya
+  name: busybox-deployment-2
+  labels:
+    app: busybox
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: velotio-busybox
+  template:
+    metadata:
+      labels:
+        app: velotio-busybox
+    spec:
+      containers:
+      - name: busybox
+        image: busybox
+        command: [ "/bin/sh", "-c", "echo $(cat /etc/velotio/key1 && cat /etc/velotio/key2) && sleep 3600" ]
+        volumeMounts:
+          - name: cmvolume
+            mountPath: /etc/velotio
+      volumes:
+        - name: cmvolume
+          configMap:
+            name: cmvolume

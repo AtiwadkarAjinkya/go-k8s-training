@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: velotio-ajinkya
+  name: busybox-deployment-4
+  labels:
+    app: busybox
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: velotio-busybox
+  template:
+    metadata:
+      labels:
+        app: velotio-busybox
+    spec:
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 3000
+        fsGroup: 2000
+      containers:
+      - name: busybox
+        image: busybox
+        command: ["/bin/sh", "-c", "echo Hello world && sleep 3600"]
+        securityContext:
+          allowPrivilegeEscalation: false

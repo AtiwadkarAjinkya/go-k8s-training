@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: velotio-ajinkya
+  name: busybox-deployment-3
+  labels:
+    app: busybox
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: velotio-busybox
+  template:
+    metadata:
+      labels:
+        app: velotio-busybox
+    spec:
+      containers:
+      - name: busybox
+        image: busybox
+        command: [ "/bin/sh", "-c", "echo $(cat /etc/velotio/username && cat /etc/velotio/password) && sleep 3600" ]
+        volumeMounts:
+          - name: secretvolume
+            mountPath: /etc/velotio
+            readOnly: true
+      volumes:
+        - name: secretvolume
+          secret:
+            secretName: velotio-secret
